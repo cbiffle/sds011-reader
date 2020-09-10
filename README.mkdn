@@ -1,0 +1,20 @@
+# SDS011 Reader
+
+This is a program I threw together for getting AQI measurements out of an SDS011
+particulate matter sensor, because the air outside is currently poison and I'd
+like to know *how* poison.
+
+This program is provided without support or any intent of maintenance.
+
+This program assumes you have connected the sensor to your computer using a
+serial port or USB-serial adapter. To use:
+
+```shell
+$ cargo run /dev/ttyUSB0
+```
+
+...where `/dev/ttyUSB0` is the path to the appropriate serial port on your
+system. If you don't have user access to that port you may need to run it as
+root.
+
+Good luck!

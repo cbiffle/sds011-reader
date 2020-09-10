@@ -1,0 +1,10 @@
+[package]
+name = "sds011-reader"
+version = "0.1.0"
+authors = ["Cliff L. Biffle <code@cliffle.com>"]
+edition = "2018"
+
+[dependencies]
+serialport = "3.3.0"
+chrono = "0.4.15"
+structopt = "0.3.17"
