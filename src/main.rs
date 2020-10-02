@@ -1,5 +1,5 @@
-use std::io::Read;
 use std::convert::TryInto;
+use std::io::Read;
 
 use structopt::StructOpt;
 
@@ -45,12 +45,13 @@ fn main() {
         let pm10 = u16::from_le_bytes(buffer[2..4].try_into().unwrap()) as f64 / 10.;
         // CSV output.
         println!(
-            "{},{},{:.3?},{},{:.3?}",
+            "{},{},{:.3?},{},{:.3?},{:.3?}",
             chrono::Local::now().to_rfc3339(),
             pm2_5,
             aqi(PM25_AQI, pm2_5).unwrap_or(501.),
             pm10,
             aqi(PM10_AQI, pm10).unwrap_or(501.),
+            aqi(PM25_AQI, lrapa(pm2_5)).unwrap_or(501.),
         );
     }
 }
@@ -77,19 +78,21 @@ const PM10_AQI: &[(f64, f64, f64)] = &[
 
 /// Converts a particulate concentration in micrograms per cubic meter (`conc`)
 /// into an AQI number using `table`.
-fn aqi(
-    table: &[(f64, f64, f64)],
-    conc: f64,
-) -> Option<f64> {
+fn aqi(table: &[(f64, f64, f64)], conc: f64) -> Option<f64> {
     let mut conc_lo = 0.;
     for entry in table {
         if conc <= entry.0 {
             let (conc_hi, aqi_lo, aqi_hi) = entry;
-            return Some(((aqi_hi - aqi_lo) / (conc_hi - conc_lo)) * (conc - conc_lo) + aqi_lo)
+            return Some(((aqi_hi - aqi_lo) / (conc_hi - conc_lo)) * (conc - conc_lo) + aqi_lo);
         } else {
             conc_lo = entry.0 + 0.1;
         }
     }
     // Values off the top end of the table are not defined in AQI.
     None
+}
+
+/// Apply LRAPA correction.
+fn lrapa(conc: f64) -> f64 {
+    conc * 0.5 - 0.66
 }

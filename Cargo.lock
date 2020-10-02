@@ -213,15 +213,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d36492546b6af1463394d46f0c834346f31548646f6ba10849802c9c9a27ac33"
 
 [[package]]
-name = "pm-sensor"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "serialport",
- "structopt",
-]
-
-[[package]]
 name = "proc-macro-error"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -280,6 +271,15 @@ name = "regex-syntax"
 version = "0.6.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26412eb97c6b088a6997e05f69403a802a92d520de2f8e63c2b65f9e0f47c4e8"
+
+[[package]]
+name = "sds011-reader"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serialport",
+ "structopt",
+]
 
 [[package]]
 name = "serialport"
