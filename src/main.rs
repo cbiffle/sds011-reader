@@ -45,13 +45,14 @@ fn main() {
         let pm10 = u16::from_le_bytes(buffer[2..4].try_into().unwrap()) as f64 / 10.;
         // CSV output.
         println!(
-            "{},{},{:.3?},{},{:.3?},{:.3?}",
+            "{},{},{:.3?},{},{:.3?},{:.3?},{:.3?}",
             chrono::Local::now().to_rfc3339(),
             pm2_5,
             aqi(PM25_AQI, pm2_5).unwrap_or(501.),
             pm10,
             aqi(PM10_AQI, pm10).unwrap_or(501.),
             aqi(PM25_AQI, lrapa(pm2_5)).unwrap_or(501.),
+            aqi(PM25_AQI, aqandu(pm2_5)).unwrap_or(501.),
         );
     }
 }
@@ -92,7 +93,12 @@ fn aqi(table: &[(f64, f64, f64)], conc: f64) -> Option<f64> {
     None
 }
 
-/// Apply LRAPA correction.
+/// Apply LRAPA correction to the pm2.5 concentration.
 fn lrapa(conc: f64) -> f64 {
     conc * 0.5 - 0.66
+}
+
+/// Apply the AQandU correction to the pm2.5 concentration.
+fn aqandu(conc: f64) -> f64 {
+    conc * 0.778 + 2.65
 }
